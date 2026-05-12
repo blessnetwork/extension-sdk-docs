@@ -2,25 +2,15 @@
 
 LLM SDK for Chrome extensions to collect usage data & run proactive prompts across **ChatGPT, Claude, Gemini, Grok, Perplexity and Rufus (Amazon)**
 
----
-
 ## Step 1: Install
 
 ```bash
 npm install @blessnetwork/extension-sdk
 ```
 
----
-
 ## Step 2: Update manifest.json
 
-On `npm install`, the SDK automatically copies its pre-built content scripts, DNR rules, offscreen files, and shared chunks into your project at:
-
-```
-public/vendor/bless-sdk/
-```
-
-Most bundlers (Vite, Webpack, etc.) serve `public/` as static assets, so these files end up in your build output automatically. Copy this into your `manifest.json`. The SDK asset paths assume the default `public/vendor/bless-sdk/` install location.
+On `npm install`, the SDK automatically copies its pre-built content scripts, DNR rules, offscreen files, and shared chunks into `public/vendor/bless-sdk/`. Add the following to your `manifest.json`:
 
 ```jsonc
 {
@@ -132,53 +122,39 @@ Most bundlers (Vite, Webpack, etc.) serve `public/` as static assets, so these f
 }
 ```
 
-> Claude and Perplexity don't require content scripts — the SDK handles them via offscreen iframes. DNR rules are toggled at runtime by the SDK.
-
----
+Note: Claude and Perplexity don't require content scripts, the SDK handles them via offscreen iframes. DNR rules are toggled at runtime by the SDK.
 
 ## Step 3: Setup your offscreen
 
-**No existing offscreen:** SDK handles its creation, skip this step.
+**If no existing offscreen:**
+SDK handles its creation, skip this step.
 
-**Have an existing offscreen:** Add this to your existing offscreen HTML:
+**If extension has an existing offscreen:**
+Add this to your existing offscreen HTML --
 
 ```html
 <script src="/vendor/bless-sdk/offscreen-init.js" type="module"></script>
 ```
 
----
-
 ## Step 4: Initialize the SDK
 
-Add this to your background service worker (the file referenced as `service_worker` in your manifest).
+Add this to your background service worker (the file referenced as `service_worker` in your manifest). The SDK handles message routing between content scripts, background, and offscreen documents automatically.
 
 ```ts
 import { initSdk } from '@blessnetwork/extension-sdk'
 
 async function init() {
 	const sdk = await initSdk({
-		apiKey: 'YOUR_API_KEY', // get this from Bless
-		disableProviders: [] // optional, e.g. ['rufus', 'metaai'] to skip providers
-		customOffscreenPath: 'path/to/your-offscreen.html', // only if you have an existing offscreen (and already setup in Step 3)
+		apiKey: 'YOUR_API_KEY', // required, get this from Bless
+		disableProviders: [] // optional, can choose any of ['chatgpt', 'claude', 'gemini', 'grok', 'perplexity', 'rufus', 'metaai']
+		customOffscreenPath: 'path/to/your-offscreen.html', // optional, only if you have an existing offscreen (see Step 3)
 	})
 }
 
 init()
 ```
 
-> In case you choose to disable any providers with `disableProviders`, you can remove the corresponding entries from Step 2
-
-The SDK handles message routing between content scripts, background, and offscreen documents automatically.
-
-### `initSdk` Options
-
-| Option                | Type       | Default | Description                                                                                                          |
-| --------------------- | ---------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
-| `apiKey`              | `string`   | —       | **Required.** Your API key from Bless.                                                                               |
-| `disableProviders`    | `string[]` | `[]`    | Provider IDs to skip: `chatgpt`, `claude`, `gemini`, `grok`, `perplexity`, `rufus`, `metaai`                         |
-| `customOffscreenPath` | `string`   | —       | Only needed if your extension already has its own offscreen document. Defaults to `vendor/bless-sdk/offscreen.html`. |
-
----
+Note: In case you choose to disable any providers with `disableProviders`, you can remove the corresponding entries from Step 2
 
 ## Provider Reference Summary
 
