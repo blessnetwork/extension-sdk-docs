@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"target": "ES2021",
+		"module": "ESNext",
+		"lib": ["ES2021", "DOM"],
+		"moduleResolution": "Bundler",
+		"strict": true,
+		"skipLibCheck": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"types": ["chrome"]
+	},
+	"include": ["src/**/*.ts", "vite.config.ts"]
+}

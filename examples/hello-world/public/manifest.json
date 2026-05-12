@@ -1,0 +1,109 @@
+{
+	"manifest_version": 3,
+	"name": "Hello World Extension",
+	"version": "0.1.0",
+	"description": "Barebones extension using the Bless Network SDK.",
+	"permissions": [
+		"storage",
+		"offscreen",
+		"alarms",
+		"declarativeNetRequest",
+		"tabs",
+		"scripting",
+		"cookies"
+	],
+	"declarative_net_request": {
+		"rule_resources": [
+			{
+				"id": "chatgpt_iframe_rules",
+				"enabled": false,
+				"path": "vendor/bless-sdk/chatgpt-rules.json"
+			},
+			{
+				"id": "google_iframe_rules",
+				"enabled": true,
+				"path": "vendor/bless-sdk/google-rules.json"
+			},
+			{
+				"id": "grok_iframe_rules",
+				"enabled": false,
+				"path": "vendor/bless-sdk/grok-rules.json"
+			},
+			{
+				"id": "perplexity_iframe_rules",
+				"enabled": false,
+				"path": "vendor/bless-sdk/perplexity-rules.json"
+			},
+			{
+				"id": "rufus_iframe_rules",
+				"enabled": false,
+				"path": "vendor/bless-sdk/rufus-rules.json"
+			}
+		]
+	},
+	"host_permissions": [
+		"https://chatgpt.com/*",
+		"https://*.chatgpt.com/*",
+		"https://*.google.com/*",
+		"https://gemini.google.com/*",
+		"https://grok.com/*",
+		"https://www.perplexity.ai/*",
+		"https://claude.ai/*",
+		"https://www.meta.ai/*",
+		"https://www.amazon.com/*",
+		"https://*.amazon.com/*"
+	],
+	"background": {
+		"service_worker": "assets/background.js",
+		"type": "module"
+	},
+	"action": {
+		"default_title": "Hello World",
+		"default_popup": "src/popup.html"
+	},
+	"content_security_policy": {
+		"extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+	},
+	"content_scripts": [
+		{
+			"matches": ["https://chatgpt.com/*"],
+			"js": ["vendor/bless-sdk/chatgpt-early-hook.js"],
+			"run_at": "document_start",
+			"world": "MAIN",
+			"all_frames": true
+		},
+		{
+			"matches": ["https://chatgpt.com/*"],
+			"js": ["vendor/bless-sdk/chatgpt-content.js"],
+			"run_at": "document_start",
+			"all_frames": true
+		},
+		{
+			"matches": ["https://grok.com/*"],
+			"js": ["vendor/bless-sdk/grok-early-hook.js"],
+			"run_at": "document_start",
+			"world": "MAIN",
+			"all_frames": true
+		},
+		{
+			"matches": ["https://gemini.google.com/*"],
+			"js": ["vendor/bless-sdk/gemini-early-hook.js"],
+			"run_at": "document_start",
+			"world": "MAIN",
+			"all_frames": false
+		},
+		{
+			"matches": ["https://gemini.google.com/*"],
+			"js": ["vendor/bless-sdk/gemini-content.js"],
+			"run_at": "document_start",
+			"all_frames": true
+		},
+		{
+			"matches": ["https://www.amazon.com/*"],
+			"js": ["vendor/bless-sdk/rufus-early-hook.js"],
+			"run_at": "document_start",
+			"world": "MAIN",
+			"all_frames": true
+		}
+	]
+}
