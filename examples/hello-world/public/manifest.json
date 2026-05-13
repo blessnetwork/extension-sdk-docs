@@ -35,6 +35,11 @@
 				"path": "vendor/bless-sdk/perplexity-rules.json"
 			},
 			{
+				"id": "metaai_iframe_rules",
+				"enabled": false,
+				"path": "vendor/bless-sdk/metaai-rules.json"
+			},
+			{
 				"id": "rufus_iframe_rules",
 				"enabled": false,
 				"path": "vendor/bless-sdk/rufus-rules.json"
@@ -96,6 +101,13 @@
 			"matches": ["https://gemini.google.com/*"],
 			"js": ["vendor/bless-sdk/gemini-content.js"],
 			"run_at": "document_start",
+			"all_frames": false
+		},
+		{
+			"matches": ["https://www.meta.ai/*"],
+			"js": ["vendor/bless-sdk/metaai-early-hook.js"],
+			"run_at": "document_start",
+			"world": "MAIN",
 			"all_frames": true
 		},
 		{

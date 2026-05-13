@@ -1,12 +1,14 @@
 # @blessnetwork/extension-sdk
 
-LLM SDK for Chrome extensions to collect usage data & run proactive prompts across **ChatGPT, Claude, Gemini, Grok, Perplexity and Rufus (Amazon)**
+LLM SDK for Chrome extensions to collect usage data & run proactive prompts across **ChatGPT, Claude, Gemini, Grok, Perplexity, Rufus (Amazon) and Meta AI**
 
 ## Step 1: Install
 
 ```bash
 npm install @blessnetwork/extension-sdk
 ```
+
+Add `public/vendor/` to your `.gitignore` (these files are generated on install).
 
 ## Step 2: Update manifest.json
 
@@ -133,7 +135,7 @@ SDK handles its creation, skip this step.
 Add this to your existing offscreen HTML --
 
 ```html
-<script src="/vendor/bless-sdk/offscreen-init.js" type="module"></script>
+<script src="/vendor/bless-sdk/offscreen/offscreen-init.js" type="module"></script>
 ```
 
 ## Step 4: Initialize the SDK
